@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/skylogin/study.microservice.git",
   "author": "Chanho Jung <skylogin@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
 }
