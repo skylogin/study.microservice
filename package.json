@@ -1,0 +1,8 @@
+{
+  "name": "micro-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/skylogin/study.microservice.git",
+  "author": "Chanho Jung <skylogin@gmail.com>",
+  "license": "MIT"
+}
