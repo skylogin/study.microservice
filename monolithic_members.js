@@ -3,7 +3,8 @@ const conn = {
   host: "localhost",
   user: "micro",
   password: "service",
-  database: "monolithic"
+  database: "monolithic",
+  port: 3306
 };
 
 exports.onRequest = function(res, method, pathname, params, cb) {

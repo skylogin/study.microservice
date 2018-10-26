@@ -1,7 +1,7 @@
 const http = require("http");
 
 let options = {
-  host: "127.0.0.1",
+  host: "localhost",
   port: 8000,
   headers: {
     "Content-Type": "application/json"

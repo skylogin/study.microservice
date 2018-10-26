@@ -10,7 +10,7 @@ let server = http
   .createServer((req, res) => {
     let method = req.method;
     let uri = url.parse(req.url, true);
-    let pathname = url.pathname;
+    let pathname = uri.pathname;
 
     if (method === "POST" || method === "PUT") {
       let body = "";
@@ -21,7 +21,7 @@ let server = http
 
       req.on("end", function() {
         let params;
-        if (req.headers["content-type"] === "application/json") {
+        if (req.headers["Content-Type"] === "application/json") {
           params = JSON.parse(body);
         } else {
           params = querystring.parse(body);

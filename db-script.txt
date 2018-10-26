@@ -6,9 +6,13 @@ USE monolithic;
 
 #create user
 CREATE USER 'micro'@'%' identified by 'service';
+CREATE USER 'service'@'localhost' identified by 'service';
+CREATE USER 'service'@'server1' identified by 'service';
 
 #grant role
 grant all privileges on monolithic.* to 'micro'@'%';
+grant all privileges on monolithic.* to 'service'@'localhost';
+grant all privileges on monolithic.* to 'service'@'server1';
 flush privileges;
 
 #create table product
