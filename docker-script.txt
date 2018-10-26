@@ -1,0 +1,14 @@
+#install mariadb
+docker pull mariadb;
+
+#run mariadb
+docker run --name micro-mariadb -e MYSQL_ROOT_PASSWORD=my-secret-pw -d -p 3306:3306 mariadb
+
+#exec docker image
+docker exec -i -t micro-mariadb bash
+
+#exec mariadb
+mysql -u root -p
+
+#stop mariadb
+docker stop micro-mariadb
