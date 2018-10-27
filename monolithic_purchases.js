@@ -1,6 +1,6 @@
 const mysql = require("mysql");
-const conn = {
-  host: "localhost",
+var dbConfig = {
+  host: "192.168.1.100",
   user: "micro",
   password: "service",
   database: "monolithic",
@@ -34,7 +34,7 @@ function register(method, pathname, params, cb) {
     response.errormessage = "Invalid Parameters";
     cb(response);
   } else {
-    let connection = mysql.createConnection(conn);
+    let connection = mysql.createConnection(dbConfig);
     connection.connect();
     connection.query(
       "INSERT INTO purchases(userid, goodsid) VALUES(?, ?)",
@@ -63,7 +63,7 @@ function inquiry(method, pathname, params, cb) {
     response.errormessage = "Invalid Parameters";
     cb(response);
   } else {
-    let connection = mysql.createConnection(conn);
+    let connection = mysql.createConnection(dbConfig);
     connection.connect();
     connection.query(
       "SELECT id, goodsid, date FROM purchases WHERE userid = ?",

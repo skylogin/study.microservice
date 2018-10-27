@@ -1,6 +1,6 @@
 const mysql = require("mysql");
-const conn = {
-  host: "localhost",
+var dbConfig = {
+  host: "192.168.1.100",
   user: "micro",
   password: "service",
   database: "monolithic",
@@ -42,7 +42,7 @@ function register(method, pathname, params, cb) {
     response.errormessage = "Invalid Parameters";
     cb(response);
   } else {
-    let connection = mysql.createConnection(conn);
+    let connection = mysql.createConnection(dbConfig);
     connection.connect();
     connection.query(
       "INSERT INTO goods(name, category, price, description) VALUES(?, ?, ?, ?)",
@@ -65,7 +65,7 @@ function inquiry(method, pathname, params, cb) {
     errormessage: "success"
   };
 
-  let connection = mysql.createConnection(conn);
+  let connection = mysql.createConnection(dbConfig);
   connection.connect();
   connection.query("SELECT * FROM goods", (error, results, fields) => {
     if (error || results.length === 0) {
@@ -90,7 +90,7 @@ function unregister(method, pathname, params, cb) {
     response.errormessage = "Invalid Parameters";
     cb(response);
   } else {
-    let connection = mysql.createConnection(conn);
+    let connection = mysql.createConnection(dbConfig);
     connection.connect();
     connection.query(
       "DELETE FROM goods WHERE id = ?",

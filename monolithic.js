@@ -21,7 +21,7 @@ let server = http
 
       req.on("end", function() {
         let params;
-        if (req.headers["Content-Type"] === "application/json") {
+        if (req.headers["content-type"] === "application/json") {
           params = JSON.parse(body);
         } else {
           params = querystring.parse(body);

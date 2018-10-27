@@ -2,7 +2,7 @@
 docker pull mariadb;
 
 #run mariadb
-docker run --name micro-mariadb -e MYSQL_ROOT_PASSWORD=my-secret-pw -hlocalhost --protocol=TCP -d -p 3306:3306 mariadb
+docker run --name micro-mariadb -e MYSQL_ROOT_PASSWORD=my-secret-pw -hlocalhost -d -p 3306:3306 mariadb
 
 #exec docker image
 docker exec -i -t micro-mariadb bash

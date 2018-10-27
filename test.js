@@ -4,7 +4,7 @@ let options = {
   host: "localhost",
   port: 8000,
   headers: {
-    "Content-Type": "application/json"
+    "content-type": "application/json"
   }
 };
 
