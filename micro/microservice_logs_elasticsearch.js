@@ -32,6 +32,10 @@ class logs extends require("./server.js") {
       "\n";
     console.log(sz);
     this.writestream.write(sz);
+<<<<<<< HEAD
+=======
+
+>>>>>>> micro-service
     data.timestamp = new Date().toISOString();
     data.params = JSON.parse(data.params);
     elasticsearch.index({
