@@ -7,6 +7,12 @@ var dbConfig = {
   port: 3306
 };
 
+const redis = require("redis").createClient();
+
+redis.on_connect("error", function(err) {
+  console.log("Redis Error " + err);
+});
+
 exports.onRequest = function(res, method, pathname, params, cb) {
   switch (method) {
     case "POST":
@@ -34,20 +40,30 @@ function register(method, pathname, params, cb) {
     response.errormessage = "Invalid Parameters";
     cb(response);
   } else {
-    let connection = mysql.createConnection(dbConfig);
-    connection.connect();
-    connection.query(
-      "INSERT INTO purchases(userid, goodsid) VALUES(?, ?)",
-      [params.userid, params.goodsid],
-      (error, results, fields) => {
-        if (error) {
-          response.errorcode = 1;
-          response.errormessage = error;
-        }
+    redis.get(params.goodsid, (err, result) => {
+      if (err || result === null) {
+        response.errorcode = 1;
+        response.errormessage = "Redis failure";
         cb(response);
+        return;
       }
-    );
-    connection.end();
+
+      let connection = mysql.createConnection(dbConfig);
+      connection.connect();
+      connection.query(
+        "INSERT INTO purchases(userid, goodsid) VALUES(?, ?)",
+        [params.userid, params.goodsid],
+        (error, results, fields) => {
+          if (error) {
+            response.errorcode = 1;
+            response.errormessage = error;
+          }
+          cb(response);
+        }
+      );
+
+      connection.end();
+    });
   }
 }
 

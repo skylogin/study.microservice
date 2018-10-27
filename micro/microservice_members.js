@@ -1,8 +1,10 @@
 "use strict";
 
 const business = require("../monolithic/monolithic_members.js");
+const cluster = require("cluster");
+
 class members extends require("./server.js") {
-  constuctor() {
+  constructor() {
     super("members", process.argv[2] ? Number(process.argv[2]) : 9020, [
       "POST/members",
       "GET/members",
@@ -28,4 +30,13 @@ class members extends require("./server.js") {
   }
 }
 
-new members();
+if (cluster.isMaster) {
+  cluster.fork();
+
+  cluster.on("exite", (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+    cluster.fork();
+  });
+} else {
+  new members();
+}
