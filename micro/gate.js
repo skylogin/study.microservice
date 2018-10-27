@@ -80,7 +80,7 @@ let server = http
 function onRequest(res, method, pathname, params) {
   let key = method + pathname;
   let client = mapUrls[key];
-  if (client == null) {
+  if (client === null || client === undefined) {
     res.writeHead(404);
     res.end();
     return;
@@ -94,7 +94,7 @@ function onRequest(res, method, pathname, params) {
 
     mapResponse[index] = res;
     index++;
-    if (mapRR[key] == null)
+    if (mapRR[key] === null || mapRR[key] === undefined)
       // 라운드 로빈 처리
       mapRR[key] = 0;
     mapRR[key]++;
@@ -106,7 +106,10 @@ function onDistribute(data) {
   for (let n in data.params) {
     let node = data.params[n];
     let key = node.host + ":" + node.port;
-    if (mapClients[key] == null && node.name != "gate") {
+    if (
+      (mapClients[key] === null || mapClients[key] === undefined) &&
+      node.name != "gate"
+    ) {
       let client = new tcpClient(
         node.host,
         node.port,
@@ -138,11 +141,22 @@ function onCreateClient(options) {
 
 function onReadClient(options, packet) {
   console.log("onReadClient", packet);
+
+  console.log("========");
+  console.log(packet);
+  console.log("========");
+
+  // var mapClients = {};
+  // var mapUrls = {};
+  // var mapResponse = {};
+  // var mapRR = {};
+  // var index = 0;
+
   mapResponse[packet.key].writeHead(200, {
-    "Content-Type": "application/json"
+    "content-type": "application/json"
   });
   mapResponse[packet.key].end(JSON.stringify(packet));
-  delete mapResponse[packet.key];
+  delete mapResponse[packet.key]; // http 응답객체 삭제
 }
 
 function onEndClient(options) {
