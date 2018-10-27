@@ -80,12 +80,12 @@ let server = http
 function onRequest(res, method, pathname, params) {
   let key = method + pathname;
   let client = mapUrls[key];
-  if (client === null) {
+  if (client == null) {
     res.writeHead(404);
     res.end();
     return;
   } else {
-    params.key = index;
+    params.key = index; // API호출에 대한 고유 키값 설정
     let packet = {
       uri: pathname,
       method: method,
@@ -94,10 +94,9 @@ function onRequest(res, method, pathname, params) {
 
     mapResponse[index] = res;
     index++;
-
-    if (mapRR[key] === null) {
+    if (mapRR[key] == null)
+      // 라운드 로빈 처리
       mapRR[key] = 0;
-    }
     mapRR[key]++;
     client[mapRR[key] % client.length].write(packet);
   }
@@ -107,7 +106,7 @@ function onDistribute(data) {
   for (let n in data.params) {
     let node = data.params[n];
     let key = node.host + ":" + node.port;
-    if (mapClients[key] === null && node.name !== "gate") {
+    if (mapClients[key] == null && node.name != "gate") {
       let client = new tcpClient(
         node.host,
         node.port,
@@ -116,14 +115,14 @@ function onDistribute(data) {
         onEndClient,
         onErrorClient
       );
-      mapClient[key] = {
+
+      mapClients[key] = {
         client: client,
         info: node
       };
-
       for (let m in node.urls) {
         let key = node.urls[m];
-        if (mapUrls[key] === null) {
+        if (mapUrls[key] == null) {
           mapUrls[key] = [];
         }
         mapUrls[key].push(client);
@@ -133,12 +132,14 @@ function onDistribute(data) {
   }
 }
 
-function onCreateClient(options) {}
+function onCreateClient(options) {
+  console.log("onCreateClient");
+}
 
 function onReadClient(options, packet) {
   console.log("onReadClient", packet);
   mapResponse[packet.key].writeHead(200, {
-    "content-type": "application/json"
+    "Content-Type": "application/json"
   });
   mapResponse[packet.key].end(JSON.stringify(packet));
   delete mapResponse[packet.key];
