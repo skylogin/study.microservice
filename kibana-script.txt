@@ -1,0 +1,6 @@
+#run
+./bin/kibana
+
+#connect
+http://localhost:5601
+
