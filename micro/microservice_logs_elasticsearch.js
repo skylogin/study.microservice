@@ -14,13 +14,6 @@ class logs extends require("./server.js") {
     ]);
 
     this.writestream = fs.createWriteStream("./log.txt", { flags: "a" });
-    data.timestamp = new Date().toISOString();
-    data.params = JSON.parse(data.params);
-    elasticsearch.index({
-      index: "microservice",
-      type: "logs",
-      body: data
-    });
 
     this.connectToDistributor("127.0.0.1", 9000, data => {
       console.log("Distributor Notification", data);
@@ -39,6 +32,13 @@ class logs extends require("./server.js") {
       "\n";
     console.log(sz);
     this.writestream.write(sz);
+    data.timestamp = new Date().toISOString();
+    data.params = JSON.parse(data.params);
+    elasticsearch.index({
+      index: "microservice",
+      type: "logs",
+      body: data
+    });
   }
 }
 
