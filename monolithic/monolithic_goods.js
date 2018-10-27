@@ -4,8 +4,14 @@ var dbConfig = {
   user: "micro",
   password: "service",
   database: "monolithic",
-  port: 3306
+  port: 3306,
+  multipleStatements: true
 };
+
+const redis = require("redis").createClient();
+redis.on("error", function(err){
+  console.log("Redis Error " + err);
+});
 
 exports.onRequest = function(res, method, pathname, params, cb) {
   switch (method) {
@@ -46,12 +52,16 @@ function register(method, pathname, params, cb) {
     let connection = mysql.createConnection(dbConfig);
     connection.connect();
     connection.query(
-      "INSERT INTO goods(name, category, price, description) VALUES(?, ?, ?, ?)",
+      "INSERT INTO goods(name, category, price, description) VALUES(?, ?, ?, ?); SELECT last_insert_id() AS id;",
       [params.name, params.category, params.price, params.description],
       (error, results, fields) => {
         if (error) {
           response.errorcode = 1;
           response.errormessage = error;
+        } else{
+          //Redis에 정보 저장
+          const id = result[1][0].id;
+          redis.set(id, JSON.stringify(params));
         }
         cb(response);
       }
@@ -102,6 +112,8 @@ function unregister(method, pathname, params, cb) {
         if (error) {
           response.errorcode = 1;
           response.errormessage = error;
+        } else{
+          redis.del(params.id);
         }
         cb(response);
       }
