@@ -93,4 +93,4 @@ class tcpServer {
   }
 }
 
-module.export = tcpServer;
+module.exports = tcpServer;

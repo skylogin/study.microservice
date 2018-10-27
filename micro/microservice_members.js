@@ -2,7 +2,7 @@
 
 const business = require("../monolithic/monolithic_members.js");
 class members extends require("./server.js") {
-  constuctor() {
+  constructor() {
     super("members", process.argv[2] ? Number(process.argv[2]) : 9020, [
       "POST/members",
       "GET/members",

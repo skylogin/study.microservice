@@ -2,8 +2,8 @@
 
 const business = require("../monolithic/monolithic_purchases.js");
 class purchases extends require("./server.js") {
-  constuctor() {
-    super("members", process.argv[2] ? Number(process.argv[2]) : 9030, [
+  constructor() {
+    super("purchases", process.argv[2] ? Number(process.argv[2]) : 9030, [
       "POST/purchases",
       "GET/purchases"
     ]);
